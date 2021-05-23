@@ -1,25 +1,47 @@
 const bodyTag = document.getElementsByTagName('body')[0]
+const headTag = document.getElementsByTagName('head')[0]
+
 const fileUrl = './assets/json.txt';
 let test;
 fetch(fileUrl).then(response => response.json()).then(response => {
     test = response
-    buildHeaderElement();
+    for (key in test) {
+        if (typeof test[key] === 'object') {
+
+        } else if (key === 'title') {
+            buildHtml('title', key, test[key], false);
+        } else {
+            buildHtml('div', key, test[key]);
+        }
+
+
+    }
 });
-
-
-function buildHeaderElement() {
-    const headerTag = document.createElement('header');
-    const titleElement = document.createElement('h1');
-    const titleText = document.createTextNode(test.title);
-    headerTag.className = 'header';
-    titleElement.appendChild(titleText);
-    headerTag.appendChild(titleElement);
-    bodyTag.appendChild(headerTag);
-}
 
 /**
  *
+ *
+ * @param tagName
+ * @param className
+ * @param content
+ * @param placeInBody
  */
-function buildMainContent() {
-    const mainTag = document.createElement('main');
+function buildHtml(
+    tagName,
+    className = false,
+    content = false,
+    placeInBody = true,
+    targetElement
+) {
+    const tag = document.createElement(tagName);
+
+    if (className) {
+        tag.className = className;
+    }
+
+    if (content) {
+        tag.innerHTML = content
+    }
+
+    placeInBody ? bodyTag.appendChild(tag) : headTag.appendChild(tag);
 }
